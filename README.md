@@ -1,3 +1,3 @@
 # AVLTree
 
-Noch verbuggt. Nicht benutzen!
+Generic AVL-Tree supporting Iterators.
