@@ -85,7 +85,7 @@ private:
       Node* temp = insertR(value, p->left);
       p->left = temp;
       temp->parent = p;
-    } else if (value > p->value) {
+    } else { //If you want a set, use if (value > p->value) {
       Node* temp = insertR(value, p->right);
       p->right = temp;
       temp->parent = p;

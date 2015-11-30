@@ -35,6 +35,10 @@ int main()
         tree.insert(i);
     }
 
+    for (int i = 0; i < 100; ++i) {
+        tree.insert(i);
+    }
+
     for (int i = -200; i < 0; ++i) {
         tree.insert(i);
     }
