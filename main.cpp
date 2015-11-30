@@ -6,7 +6,15 @@ int main()
 
     AVLTree<int> tree;
 
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 100; ++i) {
+        tree.insert(i);
+    }
+
+    for (int i = -200; i < 0; ++i) {
+        tree.insert(i);
+    }
+
+    for (int i = 100; i < 400; ++i) {
         tree.insert(i);
     }
 
