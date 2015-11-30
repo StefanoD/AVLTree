@@ -101,7 +101,11 @@ private:
     q->height = std::max(getHeight(q->left), getHeight(q->right)) + 1;
 
     q->parent = p->parent;
-    q->right->parent = p;
+
+    if (p->left != nullptr) {
+      p->left->parent = p;
+    }
+
     p->parent = q;
 
     return q;
@@ -119,7 +123,11 @@ private:
     q->height = std::max(getHeight(q->left), getHeight(q->right)) + 1;
 
     q->parent = p->parent;
-    q->left->parent = p;
+
+    if (p->right != nullptr) {
+      p->right->parent = p;
+    }
+
     p->parent = q;
 
     return q;
