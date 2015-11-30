@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <assert.h>
 #include <iterator>
-#include <iostream>
 
 template <typename T>
 class AVLTree
@@ -17,9 +16,9 @@ private:
     int height = 0;
     T value;
 
-    std::shared_ptr<Node> left = nullptr;
-    std::shared_ptr<Node> right = nullptr;
-    std::shared_ptr<Node> parent = nullptr;
+    Node* left = nullptr;
+    Node* right = nullptr;
+    Node* parent = nullptr;
 
     Node(T v)
       : value(v)
@@ -28,11 +27,16 @@ private:
 
     // Kleiner-Ordnung
     bool operator<(const T& _value) const { return value < _value; }
+
+    ~Node() {
+        delete left;
+        delete right;
+    }
   };
 
-  std::shared_ptr<Node> root = nullptr;
+  Node* root = nullptr;
 
-  int getHeight(std::shared_ptr<Node> p)
+  int getHeight(Node* p)
   {
     if (p == nullptr)
       return -1;
@@ -40,7 +44,7 @@ private:
       return p->height;
   }
 
-  int getBalance(std::shared_ptr<Node> p)
+  int getBalance(Node* p)
   {
     if (p == nullptr)
       return 0;
@@ -48,16 +52,16 @@ private:
       return getHeight(p->right) - getHeight(p->left);
   }
 
-  std::shared_ptr<Node> insertR(T value, std::shared_ptr<Node> p)
+  Node* insertR(T value, Node* p)
   {
     if (p == nullptr) {
-      p = std::make_shared<Node>(value);
+      p = new Node(value);
     } else if (value < p->value) {
-      std::shared_ptr<Node> temp = insertR(value, p->left);
+      Node* temp = insertR(value, p->left);
       p->left = temp;
       temp->parent = p;
     } else if (value > p->value) {
-      std::shared_ptr<Node> temp = insertR(value, p->right);
+      Node* temp = insertR(value, p->right);
       p->right = temp;
       temp->parent = p;
     }
@@ -67,7 +71,7 @@ private:
     return p;
   }
 
-  std::shared_ptr<Node> balance(std::shared_ptr<Node> p)
+  Node* balance(Node* p)
   {
     if (p == nullptr)
       return nullptr;
@@ -89,11 +93,11 @@ private:
     return p;
   }
 
-  std::shared_ptr<Node> rotateRight(std::shared_ptr<Node> p)
+  Node* rotateRight(Node* p)
   {
     assert(p->left != nullptr);
 
-    std::shared_ptr<Node> q = p->left;
+    Node* q = p->left;
     p->left = q->right;
     q->right = p;
 
@@ -111,11 +115,11 @@ private:
     return q;
   }
 
-  std::shared_ptr<Node> rotateLeft(std::shared_ptr<Node> p)
+  Node* rotateLeft(Node* p)
   {
     assert(p->right != nullptr);
 
-    std::shared_ptr<Node> q = p->right;
+    Node* q = p->right;
     p->right = q->left;
     q->left = p;
 
@@ -133,7 +137,7 @@ private:
     return q;
   }
 
-  std::shared_ptr<Node> rotateLeftRight(std::shared_ptr<Node> p)
+  Node* rotateLeftRight(Node* p)
   {
     assert(p->left != nullptr);
 
@@ -141,7 +145,7 @@ private:
     return rotateRight(p);
   }
 
-  std::shared_ptr<Node> rotateRightLeft(std::shared_ptr<Node> p)
+  Node* rotateRightLeft(Node* p)
   {
     assert(p->right != nullptr);
 
@@ -149,7 +153,7 @@ private:
     return rotateLeft(p);
   }
 
-  bool contains(T value, std::shared_ptr<Node> p)
+  bool contains(T value, Node* p)
   {
     if (p == nullptr) {
       return false;
@@ -166,7 +170,7 @@ private:
     }
   }
 
-  std::shared_ptr<Node> findMax(std::shared_ptr<Node> p)
+  Node* findMax(Node* p)
   {
     if (p == nullptr) {
       return p;
@@ -178,7 +182,7 @@ private:
     }
   }
 
-  std::shared_ptr<Node> findMin(std::shared_ptr<Node> p)
+  Node* findMin(Node* p)
   {
     if (p == nullptr) {
       return p;
@@ -193,21 +197,22 @@ private:
   class iterator : std::iterator<std::forward_iterator_tag, T>
   {
     AVLTree* tree;
-    std::shared_ptr<Node> node;
+    Node* node;
 
   private:
-    std::shared_ptr<Node> inOrderSuccessor(std::shared_ptr<Node> n)
+    Node* inOrderSuccessor(Node* n)
     {
-      // step 1 of the above algorithm
-      if (n->right != nullptr)
+      if (n->right != nullptr) {
         return tree->findMin(n->right);
+      }
 
-      // step 2 of the above algorithm
-      std::shared_ptr<Node> p = n->parent;
+      Node* p = n->parent;
+
       while (p != nullptr && n == p->right) {
         n = p;
         p = p->parent;
       }
+
       return p;
     }
 
@@ -247,13 +252,17 @@ private:
   };
 
 public:
+  ~AVLTree() {
+      delete root;
+  }
+
   iterator begin() { return iterator(this); }
   iterator end() { return iterator(); }
 
   void insert(T value)
   {
     if (root == nullptr) {
-      root = std::make_shared<Node>(value);
+      root = new Node(value);
     } else {
       root = insertR(value, root);
     }
