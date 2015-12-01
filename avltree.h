@@ -218,12 +218,6 @@ private:
   {
     if (p != nullptr) {
       if (p->value == value) {
-        // Get all equal values which are stored on the right branch
-        // See insertR().
-        while (p->right != nullptr && p->right->value == value) {
-          p = p->right;
-        }
-
         return p;
       } else if (p->value < value) {
         if (p->right == nullptr) {
