@@ -12,6 +12,7 @@ private slots:
   void testOrder();
   void testDoubleKeys();
   void testBiggerEqualWithDoubleValues();
+  void testBiggerEqualNotFound();
 };
 
 /**
@@ -171,6 +172,19 @@ AVLTest::testBiggerEqualWithDoubleValues()
   for (const auto& kv : map) {
     QCOMPARE(kv.second, 2);
   }
+}
+
+void AVLTest::testBiggerEqualNotFound()
+{
+    AVLTree<int> tree;
+
+    for (int i = 0; i < 100; ++i) {
+      tree.insert(i);
+    }
+
+    auto it = tree.findBiggerEqualThan(100);
+
+    QCOMPARE(it, tree.end());
 }
 
 QTEST_MAIN(AVLTest)
