@@ -146,7 +146,8 @@ AVLTest::testBiggerEqualWithDoubleValues()
     tree.insert(i);
   }
 
-  // Insert values two times, in order to test, if double values are found from the beginning.
+  // Insert values two times, in order to test, if double values are found from
+  // the beginning.
   for (int i = 0; i < 100; ++i) {
     tree.insert(i);
   }
@@ -158,9 +159,9 @@ AVLTest::testBiggerEqualWithDoubleValues()
   int i = 0;
 
   for (; it != tree.end(); ++it) {
-      QCOMPARE(*it, expectedValue);
+    QCOMPARE(*it, expectedValue);
 
-      map[expectedValue] += 1;
+    map[expectedValue] += 1;
 
     // Value changes only every second element.
     if (i % 2 != 0) {
@@ -176,55 +177,58 @@ AVLTest::testBiggerEqualWithDoubleValues()
   }
 }
 
-void AVLTest::testBiggerEqualNotFound()
+void
+AVLTest::testBiggerEqualNotFound()
 {
-    AVLTree<int> tree;
+  AVLTree<int> tree;
 
-    for (int i = 0; i < 100; ++i) {
-      tree.insert(i);
-    }
+  for (int i = 0; i < 100; ++i) {
+    tree.insert(i);
+  }
 
-    auto it = tree.findBiggerEqualThan(100);
+  auto it = tree.findBiggerEqualThan(100);
 
-    QCOMPARE(it, tree.end());
+  QCOMPARE(it, tree.end());
 }
 
-void AVLTest::testContains()
+void
+AVLTest::testContains()
 {
-    AVLTree<int> tree;
+  AVLTree<int> tree;
 
-    for (int i = 0; i < 100; ++i) {
-      tree.insert(i);
-    }
+  for (int i = 0; i < 100; ++i) {
+    tree.insert(i);
+  }
 
-    for (int elem : tree) {
-      QVERIFY(tree.contains(elem));
-    }
+  for (int elem : tree) {
+    QVERIFY(tree.contains(elem));
+  }
 
-    for (int i = 100; i < 110; ++i) {
-      QVERIFY(!tree.contains(i));
-    }
+  for (int i = 100; i < 110; ++i) {
+    QVERIFY(!tree.contains(i));
+  }
 
-    for (int i = -10; i < 0; ++i) {
-      QVERIFY(!tree.contains(i));
-    }
+  for (int i = -10; i < 0; ++i) {
+    QVERIFY(!tree.contains(i));
+  }
 }
 
-void AVLTest::testClear()
+void
+AVLTest::testClear()
 {
-    AVLTree<int> tree;
+  AVLTree<int> tree;
 
-    for (int i = 0; i < 100; ++i) {
-      tree.insert(i);
-    }
+  for (int i = 0; i < 100; ++i) {
+    tree.insert(i);
+  }
 
-    tree.clear();
+  tree.clear();
 
-    tree.insert(1);
+  tree.insert(1);
 
-    for (int elem : tree) {
-      QCOMPARE(elem, 1);
-    }
+  for (int elem : tree) {
+    QCOMPARE(elem, 1);
+  }
 }
 
 QTEST_MAIN(AVLTest)
