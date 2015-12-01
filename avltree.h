@@ -176,13 +176,17 @@ private:
   {
     if (p == nullptr) {
       return false;
-    } else if (value < p->value) {
-      contains(value, p->left);
-    } else if (value > p->value) {
-      contains(value, p->right);
-    } else {
-      return true;
     }
+
+    if (value < p->value) {
+      return contains(value, p->left);
+    }
+
+    if (value > p->value) {
+      return contains(value, p->right);
+    }
+
+    return true;
   }
 
   Node* findMax(Node* p)
