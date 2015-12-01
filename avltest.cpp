@@ -11,7 +11,7 @@ private slots:
   void testOrderSuccIsSmaller();
   void testOrder();
   void testDoubleKeys();
-  void testBiggerEqual();
+  void testBiggerEqualWithDoubleValues();
 };
 
 /**
@@ -135,7 +135,7 @@ AVLTest::testDoubleKeys()
  * Search for iterator position where value is >= than passed value.
  */
 void
-AVLTest::testBiggerEqual()
+AVLTest::testBiggerEqualWithDoubleValues()
 {
   AVLTree<int> tree;
 
