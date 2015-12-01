@@ -294,6 +294,11 @@ private:
 public:
   ~AVLTree() { delete root; }
 
+  void clear() {
+      delete root;
+      root = nullptr;
+  }
+
   iterator begin()
   {
     Node* startNode = findMin(root);
