@@ -79,7 +79,8 @@ private:
       Node* temp = insertR(value, p->left);
       p->left = temp;
       temp->parent = p;
-    } else { // if (value >= p->value). If you want a set, use else if (value > p->value) and an empty else instruction
+    } else { // if (value >= p->value). If you want a set, use else if (value >
+             // p->value) and an empty else instruction
       Node* temp = insertR(value, p->right);
       p->right = temp;
       temp->parent = p;
@@ -217,11 +218,12 @@ private:
   {
     if (p != nullptr) {
       if (p->value == value) {
-          // Get all equal values which are stored on the right branch
-          // See insertR().
-          while(p->right->value == value) {
-              p = p->right;
-          }
+        // Get all equal values which are stored on the right branch
+        // See insertR().
+        while (p->right != nullptr && p->right->value == value) {
+          p = p->right;
+        }
+
         return p;
       } else if (p->value < value) {
         if (p->right == nullptr) {
