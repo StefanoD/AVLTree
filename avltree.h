@@ -19,7 +19,6 @@
 #ifndef AVLTREE_H
 #define AVLTREE_H
 
-#include <memory>
 #include <algorithm>
 #include <assert.h>
 #include <iterator>
@@ -177,16 +176,12 @@ private:
   {
     if (p == nullptr) {
       return false;
+    } else if (value < p->value) {
+      contains(value, p->left);
+    } else if (value > p->value) {
+      contains(value, p->right);
     } else {
-      if (value < *p) {
-        contains(value, p->left);
-      } else {
-        if (value > *p) {
-          contains(value, p->right);
-        } else {
-          return true;
-        }
-      }
+      return true;
     }
   }
 
@@ -294,9 +289,10 @@ private:
 public:
   ~AVLTree() { delete root; }
 
-  void clear() {
-      delete root;
-      root = nullptr;
+  void clear()
+  {
+    delete root;
+    root = nullptr;
   }
 
   iterator begin()
