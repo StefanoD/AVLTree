@@ -52,6 +52,16 @@ int main()
     }
 
     std::cout << std::endl;
+    std::cout << "====findBiggerEqualThan====" << std::endl;
+
+    auto it = tree.findBiggerEqualThan(0);
+
+    for (; it != tree.end(); ++it) {
+        int i = *it;
+        std::cout << i << ",";
+    }
+
+    std::cout << std::endl;
 
     return 0;
 }

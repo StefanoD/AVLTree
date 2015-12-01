@@ -53,9 +53,10 @@ private:
     // Kleiner-Ordnung
     bool operator<(const T& _value) const { return value < _value; }
 
-    ~Node() {
-        delete left;
-        delete right;
+    ~Node()
+    {
+      delete left;
+      delete right;
     }
   };
 
@@ -85,7 +86,7 @@ private:
       Node* temp = insertR(value, p->left);
       p->left = temp;
       temp->parent = p;
-    } else { //If you want a set, use if (value > p->value) {
+    } else { // if (value >= p->value). If you want a set, use else if (value > p->value) and an empty else instruction
       Node* temp = insertR(value, p->right);
       p->right = temp;
       temp->parent = p;
@@ -219,26 +220,52 @@ private:
     }
   }
 
+  Node* findBiggerEqualThan(Node* p, T value)
+  {
+    if (p != nullptr) {
+      if (p->value == value) {
+          // Get all equal values which are stored on the right branch
+          // See insertR().
+          while(p->right->value == value) {
+              p = p->right;
+          }
+        return p;
+      } else if (p->value < value) {
+        if (p->right == nullptr) {
+          return inOrderSuccessor(p);
+        }
+        return findBiggerEqualThan(p->right, value);
+      } else { // if (p->value > value) {
+        if (p->left == nullptr) {
+          return p;
+        }
+        return findBiggerEqualThan(p->left, value);
+      }
+    } else {
+      return p;
+    }
+  }
+
+  Node* inOrderSuccessor(Node* n)
+  {
+    if (n->right != nullptr) {
+      return findMin(n->right);
+    }
+
+    Node* p = n->parent;
+
+    while (p != nullptr && n == p->right) {
+      n = p;
+      p = p->parent;
+    }
+
+    return p;
+  }
+
   class iterator : std::iterator<std::forward_iterator_tag, T>
   {
     AVLTree* tree;
     Node* node;
-
-    Node* inOrderSuccessor(Node* n)
-    {
-      if (n->right != nullptr) {
-        return tree->findMin(n->right);
-      }
-
-      Node* p = n->parent;
-
-      while (p != nullptr && n == p->right) {
-        n = p;
-        p = p->parent;
-      }
-
-      return p;
-    }
 
   public:
     explicit iterator()
@@ -247,10 +274,10 @@ private:
     {
     }
 
-    explicit iterator(AVLTree* tree)
+    explicit iterator(AVLTree* tree, Node* startNode = nullptr)
       : tree(tree)
+      , node(startNode)
     {
-      node = tree->findMin(tree->root);
     }
 
     T& operator*() { return node->value; }
@@ -258,7 +285,7 @@ private:
     iterator& operator++()
     {
       if (node != nullptr) {
-        node = inOrderSuccessor(node);
+        node = tree->inOrderSuccessor(node);
       }
 
       return *this;
@@ -276,12 +303,20 @@ private:
   };
 
 public:
-  ~AVLTree() {
-      delete root;
-  }
+  ~AVLTree() { delete root; }
 
-  iterator begin() { return iterator(this); }
+  iterator begin()
+  {
+    Node* startNode = findMin(root);
+    return iterator(this, startNode);
+  }
   iterator end() { return iterator(); }
+
+  iterator findBiggerEqualThan(T value)
+  {
+    Node* p = findBiggerEqualThan(root, value);
+    return iterator(this, p);
+  }
 
   void insert(T value)
   {
